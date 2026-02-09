@@ -5,7 +5,7 @@ import comp.AccountsTableModel;
 import javax.swing.*;
 import java.awt.*;
 
-public class AccountsView extends View{
+public class AccountsView {
     private JPanel accountsPanel;
     private JTable accountsTable;
     private JButton addUserButton;

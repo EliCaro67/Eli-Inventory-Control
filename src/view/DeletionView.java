@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class DeletionView  extends View {
+public class DeletionView {
 
     private JPanel deletionPanel;
 

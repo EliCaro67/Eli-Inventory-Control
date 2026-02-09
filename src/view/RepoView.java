@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class RepoView  extends View {
+public class RepoView {
     private JPanel repoPanel;
 
     public RepoView(Component parent) {

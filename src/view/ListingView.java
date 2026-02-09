@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class ListingView  extends View {
+public class ListingView {
     private JPanel listingPanel;
 
     public ListingView(Component parent) {

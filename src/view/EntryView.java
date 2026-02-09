@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class EntryView  extends View {
+public class EntryView {
     private JPanel entryPanel;
 
     public EntryView(Component parent) {

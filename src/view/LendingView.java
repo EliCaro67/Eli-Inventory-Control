@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class LendingView  extends View {
+public class LendingView {
     private JPanel lendingPanel;
 
     public LendingView(Component parent) {
