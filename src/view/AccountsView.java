@@ -9,7 +9,7 @@ public class AccountsView extends View{
     private JPanel accountsPanel;
     private JTable accountsTable;
     private JButton addUserButton;
-    private JButton updateUserButton;
+    private JButton updateRoleButton;
     private JPanel accountsContent;
     private JButton deleteUserButton;
     private final AccountsTableModel model;
@@ -38,7 +38,7 @@ public class AccountsView extends View{
     }
 
     public JButton getUpdateUserButton() {
-        return updateUserButton;
+        return updateRoleButton;
     }
 
     public JButton getDeleteUserButton() {
