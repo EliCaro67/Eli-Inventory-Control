@@ -56,7 +56,7 @@ public class Main implements Controller, Constants {
         JTable accountsTable = accountsView.getAccountsTable();
         AccountsTableModel tableModel = (AccountsTableModel) accountsTable.getModel();
         List<User> users;
-        int row = -1;
+        int row;
         switch (actionCommand) {
             case "add_user":
                 user = AccountsDialog.getUserRole(accountsView.getAccountsPanel());

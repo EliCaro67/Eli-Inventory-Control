@@ -1,7 +1,6 @@
 package common;
 
 import auth.AccountsManager;
-import comp.User;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -9,7 +8,6 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.logging.Level;
 
 public final class Utils implements Constants{
