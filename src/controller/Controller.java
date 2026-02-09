@@ -1,6 +1,6 @@
-package comp;
+package controller;
 
-import auth.AccountsManager;
+import comp.AccountsTableModel;
 
 import java.awt.event.ActionListener;
 

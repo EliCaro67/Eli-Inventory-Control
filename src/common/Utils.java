@@ -15,7 +15,7 @@ import java.util.logging.Level;
 public final class Utils implements Constants{
 
     public static BufferedImage getImageFromSource(String fileName) {
-        InputStream inputStream = Utils.class.getResourceAsStream(IMAGE_DIR + "/" + fileName);
+        InputStream inputStream = Utils.class.getResourceAsStream(IMAGE_DIR + fileName);
         BufferedImage image;
         try {
             assert inputStream != null;

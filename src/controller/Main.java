@@ -1,9 +1,8 @@
-package main;
+package controller;
 
 import auth.AccountsManager;
 import common.Constants;
 import comp.AccountsTableModel;
-import comp.Controller;
 import comp.User;
 import dbase.DAO;
 import dbase.PersonnelDAO;
@@ -60,7 +59,7 @@ public class Main implements Controller, Constants {
         int row = -1;
         switch (actionCommand) {
             case "add_user":
-                user = AccountsDialog.getUserRole(null);
+                user = AccountsDialog.getUserRole(accountsView.getAccountsPanel());
                 if (user != null){
                     user.setPassword(accManager.encryptPassword(user.getPassword()));
                     dao.save(user);

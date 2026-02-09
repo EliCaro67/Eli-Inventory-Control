@@ -16,8 +16,8 @@ public class SplashPanel extends JPanel {
     }
 
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         g.drawImage(image,
                 0, 0,
                 getWidth(), getHeight(),

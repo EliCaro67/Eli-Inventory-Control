@@ -1,18 +1,16 @@
 package view;
 
 import auth.Credentials;
-import comp.Role;
-import comp.User;
 import common.Constants;
 import common.Utils;
+import comp.Role;
+import comp.User;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
-import java.util.Arrays;
 
 public class AccountsDialog implements Constants {
-
 
     public static User getUserRole(Component parent) {
         try {
@@ -157,7 +155,7 @@ public class AccountsDialog implements Constants {
         constraints.weightx = 1.0;
         panel.add(roleComboBox, constraints);
         panel.requestFocus();
-        int okCxl = ViewUtils.showDialog(parent, panel, "User Information");
+        int okCxl = ViewUtils.showDialog(parent, panel, "User Role");
 
         // 3. Process the result when the user clicks OK
         if (okCxl == JOptionPane.OK_OPTION) {

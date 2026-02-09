@@ -1,6 +1,6 @@
 package view;
 
-import comp.Controller;
+import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
