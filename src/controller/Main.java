@@ -26,6 +26,8 @@ public class Main implements Controller, Constants {
         createAndShowGUI();
     }
 
+
+
     private void createAndShowGUI() {
         JFrame frame = new JFrame();
         frame.setTitle("Inventory Control");

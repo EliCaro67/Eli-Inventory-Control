@@ -28,6 +28,11 @@ public class Decryptor implements Constants {
 			throw new RuntimeException(e.getMessage());
 		}
     }
+
+	/**
+	 * Generates clear text from encrypted text
+	 * @return byte array of clear text
+	 */
     
     public byte[] getClearText() {
     	return clearText;
