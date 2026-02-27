@@ -15,6 +15,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
+/**
+ * @Author Elisha Carothers
+ */
 public class Main implements Controller, Constants {
     private final DAO< User> dao;
     private AccountsTableModel tableModel;
