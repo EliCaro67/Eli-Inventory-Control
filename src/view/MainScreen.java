@@ -1,5 +1,6 @@
 package view;
 
+import comp.DeleteTableModel;
 import controller.Controller;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class MainScreen extends JTabbedPane {
         accountsView = new AccountsView(this,
                 controller.getTableModel());
         entryView = new EntryView(this);
-        deletionView = new DeletionView(this);
+        deletionView = new DeletionView(this, (DeleteTableModel) model);
         listingView = new ListingView(this);
         lendingView = new LendingView(this);
         repoView = new RepoView(this);

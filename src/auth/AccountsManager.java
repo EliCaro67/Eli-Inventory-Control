@@ -25,7 +25,8 @@ public final class AccountsManager implements Constants {
      */
     private SecretKey key;
     private final String algorithms = "DES/ECB/PKCS5Padding";
-    private final String algorithmInUse = "DES";
+    public static String algorithmInUse = "DES";
+
 
 
     public AccountsManager() {

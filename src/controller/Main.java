@@ -1,28 +1,53 @@
 package controller;
 
 import auth.AccountsManager;
+import auth.Decryptor;
+import auth.Encryptor;
+import auth.SecretKeyGenerator;
 import common.Constants;
+import common.Utils;
 import comp.AccountsTableModel;
+import comp.Administrator;
 import comp.User;
 import dbase.DAO;
 import dbase.PersonnelDAO;
 import view.AccountsDialog;
 import view.AccountsView;
+import view.AdminView;
 import view.MainScreen;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.swing.*;
+import javax.swing.text.html.parser.TagElement;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @Author Elisha Carothers
+ * This is the entry point to the code.
  */
 public class Main implements Controller, Constants {
-    private final DAO< User> dao;
+    private final DAO<User> dao;
     private AccountsTableModel tableModel;
     private AccountsManager accManager;
     private MainScreen mainScreen;
+    private Administrator admin;
+    private byte[] password;
+    private SecretKey secretKey;
+    private String name;
+    private AdminView adminView = new AdminView();
+
+    private static final String TAG1 = "administrator";
+
 
     public Main() {
         dao = new PersonnelDAO();
@@ -30,8 +55,8 @@ public class Main implements Controller, Constants {
     }
 
 
-
     private void createAndShowGUI() {
+
         JFrame frame = new JFrame();
         frame.setTitle("Inventory Control");
         frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
@@ -39,8 +64,64 @@ public class Main implements Controller, Constants {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setVisible(true);
+
+
+        //Administrator Setup
+        if (isInitialSetup()) {
+            JFrame frameAdmin = new JFrame();
+            JPanel contentPanel = new JPanel();
+            CardLayout layout = new CardLayout();
+            contentPanel.setLayout(layout);
+            AdminView adminView = new AdminView();
+            JPanel adminContent = adminView.getAdminPanel();
+            contentPanel.add(adminContent, TAG1);
+            frameAdmin.setContentPane(contentPanel);
+            frameAdmin.setDefaultCloseOperation(frameAdmin.EXIT_ON_CLOSE);
+            frameAdmin.setLocationRelativeTo(null);
+            frameAdmin.pack();
+            frameAdmin.setVisible(true);
+
+            JPasswordField adminPassword = adminView.getPasswordField1();
+            JTextField adminusername = adminView.getAdminUser();
+
+
+            JButton adminSave = adminView.getAdminCreateButton();
+            adminSave.addActionListener(actionEvent -> {
+                password = adminPassword.getText().getBytes();
+                System.out.println(password);
+                name = adminusername.getText();
+                System.out.println(name);
+
+                try {
+                    secretKey = new SecretKeyGenerator(AccountsManager.algorithmInUse).getSecretKey();
+
+                } catch (NoSuchAlgorithmException e) {
+                    logger.info(e.getMessage());
+                    throw new RuntimeException(e.getMessage());
+                }
+
+                try {
+                    password = new Encryptor(password, AccountsManager.algorithmInUse, secretKey).getCipherText();
+                } catch (BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |
+                         IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                admin = new Administrator(name, password, secretKey);
+                Utils.commitToFile(admin, Constants.ADMIN_DB);
+                System.out.println("Created Admin entry...");
+                System.out.println("Admin Name:" + admin.getUserName());
+                System.out.println("Admin Password:" + Arrays.toString(admin.getPassword()));
+                frameAdmin.dispose();
+                frame.setVisible(true);
+            });
+        }
+
+        if (!isInitialSetup()) {
+            frame.setVisible(true);
+        }
     }
+
 
     private void addComponents(JFrame frame) {
         mainScreen = new MainScreen(frame, this);
@@ -51,6 +132,7 @@ public class Main implements Controller, Constants {
         acctView.getDeleteUserButton().addActionListener(this);
         frame.setContentPane(mainScreen);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         // Changes Table contents
@@ -65,7 +147,7 @@ public class Main implements Controller, Constants {
         switch (actionCommand) {
             case "add_user":
                 user = AccountsDialog.getUserRole(accountsView.getAccountsPanel());
-                if (user != null){
+                if (user != null) {
                     user.setPassword(accManager.encryptPassword(user.getPassword()));
                     dao.save(user);
                 }
@@ -82,7 +164,7 @@ public class Main implements Controller, Constants {
                     break;
                 if (!updatedUser.equals(user)) {
                     updatedUser.setPassword(accManager.encryptPassword(updatedUser.getPassword()));
-                    if(dao.get(user.getLogin()).isPresent()) {
+                    if (dao.get(user.getLogin()).isPresent()) {
                         dao.delete(user);
                         dao.save(updatedUser);
                     }
@@ -100,10 +182,36 @@ public class Main implements Controller, Constants {
         }
         // Set up JTable on AccountView
         tableModel.fireTableDataChanged();
-        for (User u : dao.getAll()){
+        for (User u : dao.getAll()) {
             System.out.println(u);
         }
         System.out.println("---");
+    }
+
+    public boolean isInitialSetup() {
+        //TODO
+
+        try {
+            admin = Utils.loadFromFile(Constants.ADMIN_DB);
+        } catch (NullPointerException | IOException e) {
+            logger.info(e.getMessage());
+            return true;
+        }
+        return false;
+    }
+
+    public String getAdministratorName() {
+        if (admin == null)
+            return null;
+        else
+            return admin.getUserName();
+    }
+
+    public byte[] getAdministratorPassword() {
+        if (admin == null)
+            return null;
+        else
+            return admin.getPassword();
     }
 
     @Override
@@ -112,6 +220,7 @@ public class Main implements Controller, Constants {
             tableModel = new AccountsTableModel(dao);
         return tableModel;
     }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);
     }
