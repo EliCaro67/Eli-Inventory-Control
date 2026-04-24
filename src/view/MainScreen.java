@@ -1,5 +1,6 @@
 package view;
 
+import comp.DeleteTableModel;
 import controller.Controller;
 
 import javax.swing.*;
@@ -27,8 +28,8 @@ public class MainScreen extends JTabbedPane {
         // Assign them to instance variables
         accountsView = new AccountsView(this,
                 controller.getTableModel());
-        entryView = new EntryView(this);
-        deletionView = new DeletionView(this);
+        entryView = new EntryView(this, controller.getEntryTableModel());
+        deletionView = new DeletionView(this, controller.getDeleteTableModel());
         listingView = new ListingView(this);
         lendingView = new LendingView(this);
         repoView = new RepoView(this);
