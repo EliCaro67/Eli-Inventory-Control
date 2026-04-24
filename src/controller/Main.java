@@ -6,15 +6,11 @@ import auth.Encryptor;
 import auth.SecretKeyGenerator;
 import common.Constants;
 import common.Utils;
-import comp.AccountsTableModel;
-import comp.Administrator;
-import comp.User;
+import comp.*;
 import dbase.DAO;
+import dbase.InventoryDAO;
 import dbase.PersonnelDAO;
-import view.AccountsDialog;
-import view.AccountsView;
-import view.AdminView;
-import view.MainScreen;
+import view.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.NoSuchPaddingException;
@@ -37,6 +33,7 @@ import java.util.Scanner;
  */
 public class Main implements Controller, Constants {
     private final DAO<User> dao;
+    private final DAO<Book> inventorydao;
     private AccountsTableModel tableModel;
     private AccountsManager accManager;
     private MainScreen mainScreen;
@@ -44,6 +41,8 @@ public class Main implements Controller, Constants {
     private byte[] password;
     private SecretKey secretKey;
     private String name;
+    private DeleteTableModel deleteTableModel;
+    private EntryTableModel entryTableModel;
     private AdminView adminView = new AdminView();
 
     private static final String TAG1 = "administrator";
@@ -51,6 +50,7 @@ public class Main implements Controller, Constants {
 
     public Main() {
         dao = new PersonnelDAO();
+        inventorydao = new InventoryDAO();
         createAndShowGUI();
     }
 
@@ -178,6 +178,9 @@ public class Main implements Controller, Constants {
                 user = users.get(row);
                 dao.delete(user);
                 break;
+
+            case "delete_book":
+
             default:
         }
         // Set up JTable on AccountView
@@ -219,6 +222,21 @@ public class Main implements Controller, Constants {
         if (tableModel == null)
             tableModel = new AccountsTableModel(dao);
         return tableModel;
+    }
+
+    @Override
+    public DeleteTableModel getDeleteTableModel() {
+        if (deleteTableModel == null)
+            deleteTableModel = new DeleteTableModel(inventorydao);
+        return deleteTableModel;
+
+    }
+
+    @Override
+    public EntryTableModel getEntryTableModel() {
+        if (entryTableModel == null)
+            entryTableModel = new EntryTableModel(inventorydao);
+        return entryTableModel;
     }
 
     public static void main(String[] args) {

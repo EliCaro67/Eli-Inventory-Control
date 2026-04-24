@@ -10,7 +10,7 @@ public class DeletionView {
     private JPanel deletionPanel;
     private JPanel deletionContent;
     private JTable deletionTable;
-    private JButton delete;
+    private JButton deleteButton;
     private final DeleteTableModel model;
 
     public DeletionView(Component parent, DeleteTableModel model) {
@@ -37,7 +37,7 @@ public class DeletionView {
     }
 
     public JButton getDelete() {
-        return delete;
+        return deleteButton;
     }
 
     public DeleteTableModel getModel() {

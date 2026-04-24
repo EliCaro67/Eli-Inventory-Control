@@ -17,6 +17,9 @@ import static common.Constants.INVENTORY_DB;
 public class InventoryDAO implements DAO<Book> {
 
     private HashMap<String/* login */, Book> bookDB;
+    public InventoryDAO() {
+        loadOrInitializeMap();
+    }
 
     private void loadOrInitializeMap() {
         try {
