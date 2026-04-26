@@ -1,6 +1,8 @@
 package comp;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     private final Author author;
     private final String title;
     private boolean isAvailable;
