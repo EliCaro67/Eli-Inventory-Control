@@ -25,6 +25,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -130,6 +131,11 @@ public class Main implements Controller, Constants {
         acctView.getAddUserButton().addActionListener(this);
         acctView.getUpdateUserButton().addActionListener(this);
         acctView.getDeleteUserButton().addActionListener(this);
+        EntryView entryView = mainScreen.getEntryView();
+        entryView.getSaveButton().addActionListener(this);
+        entryView.getUpdateButton().addActionListener(this);
+        DeletionView deletionView = mainScreen.getDeletionView();
+        deletionView.getDelete().addActionListener(this);
         frame.setContentPane(mainScreen);
     }
 
@@ -143,6 +149,17 @@ public class Main implements Controller, Constants {
         JTable accountsTable = accountsView.getAccountsTable();
         AccountsTableModel tableModel = (AccountsTableModel) accountsTable.getModel();
         List<User> users;
+
+        Book book;
+        DeletionView deletionView = mainScreen.getDeletionView();
+        JTable deleteBookTable = deletionView.getDeletionTable();
+        DeleteTableModel deleteTableModel1 = (DeleteTableModel) deleteBookTable.getModel();
+
+        EntryView entryView = mainScreen.getEntryView();
+        JTable enterBookTable = entryView.getEntryTable();
+        EntryTableModel entryTableModel1 = (EntryTableModel) enterBookTable.getModel();
+        List<Book> books;
+
         int row;
         switch (actionCommand) {
             case "add_user":
@@ -180,13 +197,37 @@ public class Main implements Controller, Constants {
                 break;
 
             case "delete_book":
+                row = deleteBookTable.getSelectedRow();
+                if (row<0)
+                    break;
+                books = inventorydao.getAll();
+                book = books.get(row);
+                inventorydao.delete(book);
+                break;
 
+            case "createEntry":
+                book = EntryDialog.getBookInfo(entryView.getEntryPanel());
+                    inventorydao.save(book);
+                break;
+
+            case "updateEntry":
+                row = enterBookTable.getSelectedRow();
+                books = inventorydao.getAll();
+                book = EntryDialog.getBookInfo(entryView.getEntryPanel(), books.get(row));
+                inventorydao.update(book);
+                break;
             default:
         }
         // Set up JTable on AccountView
         tableModel.fireTableDataChanged();
         for (User u : dao.getAll()) {
             System.out.println(u);
+        }
+        System.out.println("---");
+
+        entryTableModel1.fireTableDataChanged();
+        for (Book b : inventorydao.getAll()) {
+            System.out.println(b);
         }
         System.out.println("---");
     }
