@@ -50,7 +50,7 @@ public class DeleteTableModel extends AbstractTableModel {
             Book book = bookList.get(i);
 
             if (0 == i1) {
-                return book.getAuthor();
+                return book.getAuthor().name() + ", " + book.getAuthor().surname();
             } else if (1 == i1) {
                 return book.getTitle();
             } else if (2 == i1) {
